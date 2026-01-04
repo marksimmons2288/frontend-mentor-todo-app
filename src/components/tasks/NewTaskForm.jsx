@@ -60,7 +60,6 @@ const NewTaskForm = ({ onAddTask }) => {
         placeholder="Add a new task…"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
-        disabled={submitting}
       />
 
       <button type="submit" disabled={submitting || !title.trim()}>

@@ -1,17 +1,18 @@
+import CustomCheckbox from "@components/shared/Checkbox.component";
+
 /**
- * Displays a single task as a list item.
+ * Displays a single task as a list item (read-only on Day 2).
  *
  * @param {object} props
- * @param {{ id: number, title: string, is_complete: boolean }} props.task
+ * @param {{ id: number, title: string, is_complete: boolean, inserted_at?: string }} props.task
  * @param {(id: number) => void} props.onToggleComplete
  * @param {(id: number) => void} props.onDelete
  */
 export default function TaskItem({ task, onToggleComplete, onDelete }) {
-
-/**
- * Handles checkbox change events and notifies the parent component.                           
- */
-const handleToggle = () => {
+  /**
+   * Handles checkbox changes and notifies the parent component.
+   */
+  const handleToggle = () => {
     onToggleComplete(task.id, !task.is_complete);
   };
 
@@ -21,24 +22,31 @@ const handleToggle = () => {
   const handleDelete = () => {
     onDelete(task.id);
   };
+
   return (
     <li className="task-item">
-      <label className="task-item_content">
-        <input
-          type="checkbox"
+      <label className="task-item__content">
+        <CustomCheckbox
           checked={task.is_complete}
           onChange={handleToggle}
         />
-        <span className={task.is_complete ? "task-item_title task-item_title--done" : "task-item_title"}>
+        <span
+          className={
+            task.is_complete
+              ? "task-item__title task-item__title--done"
+              : "task-item__title"
+          }
+        >
           {task.title}
         </span>
-      </label>  
+      </label>
       <button
-        className="task-item_delete"  
+        type="button"
+        className="task-item__delete"
         onClick={handleDelete}
-        aria-label= "Delete task"
-        >
-        x
+        aria-label="Delete task"
+      >
+        ✕
       </button>
     </li>
   );

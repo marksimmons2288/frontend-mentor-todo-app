@@ -1,16 +1,17 @@
 import { useState } from "react";
 
+// Custom components
+import Input from "@components/shared/input.component";
+
 /**
- * NewTaskForm lets the user add a new task.(correlated to TaskItem.jsx and TaskList.jsx)
+ * NewTaskForm lets the user add a new task.
  *
  * @param {object} props
  * @param {(title: string) => Promise<void> | void} props.onAddTask
- *        Callback invoked when the form is submitted with a non-empty title. (Correlated to TaskList.jsx === Tasklist and loadTasks function)
+ *        Callback invoked when the form is submitted with a non-empty title.
  */
-
-// Three states: title, submitting, error for form handling
 const NewTaskForm = ({ onAddTask }) => {
- const [title, setTitle] = useState("");
+  const [title, setTitle] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -54,12 +55,14 @@ const NewTaskForm = ({ onAddTask }) => {
         Task title
       </label>
 
-      <input
+      <Input
         id="task-title"
         type="text"
         placeholder="Add a new task…"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
+        disabled={submitting}
+        className="flex-1"
       />
 
       <button type="submit" disabled={submitting || !title.trim()}>

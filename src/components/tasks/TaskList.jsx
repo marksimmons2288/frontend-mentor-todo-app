@@ -1,6 +1,5 @@
 
 import {useState, useMemo} from "react";
-import Spinner from 'react-bootstrap/Spinner';
 import TaskItem from "./TaskItem.jsx";
 import NewTaskForm from "./NewTaskForm.jsx";   
 import { useTasks } from "../../hooks/useTasks.js";    
@@ -97,7 +96,7 @@ function TaskList() {
           }}
           >
           Active
-          </button>
+          </button> 
           <button
           type='button'
           onClick={() => setFilter('completed')}
@@ -118,7 +117,7 @@ function TaskList() {
       )}
       
       {loading ? (
-      <Spinner animation="border"/>
+      <div>Loading tasks...</div>
       ) : (
         <ul className="task-list">
         {visibleTasks.map((task) => (

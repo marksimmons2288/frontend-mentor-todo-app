@@ -1,37 +1,32 @@
-/** 
- * Custom HOOK that encapulstes all task-related Supabase logic:
- * load task
- * add task
- * toggle completion
- * delete task
- * optional- realtime updates
-*/
+/**
+ * Custom hook that encapsulates all task-related Supabase logic:
+ *  - load tasks
+ *  - add task
+ *  - toggle completion
+ *  - delete task
+ *  - (optional) realtime updates
+ */
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "@lib/supabaseClient";
 
 function useTasks() {
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-/**
-   * Loads tasks from the Supabase "tasks" table. (call supabase client instance)
+  /**
+   * Loads tasks from the Supabase "tasks" table.
    */
-
-const loadTasks = useCallback(async () => {
+  const loadTasks = useCallback(async () => {
     // Set loading and errors
     setLoading(true);
     setError(null);
 
-    //  function from supabase to fetch data from the tasks table.(taskList- renders everytime something updates= re-renders the handleToggleComplet(below))
-    
     const { data, error: queryError } = await supabase
       .from('tasks')
-      // select all columns
       .select('*')
       .order("created_at", { ascending: false });
-   
-      // Handle errors and set tasks state according to response
+
     if (queryError) {
       setError('Error loading tasks: ' + queryError.message);
     } else {
@@ -39,85 +34,84 @@ const loadTasks = useCallback(async () => {
     }
     setLoading(false);
   }, []);
-/**
- * Adds a new task by inserting it into Supabase "tasks" table and updating local state.
- 
-* @param {string} title - The title of the new task.
-*/
 
-// Calls the event inside the handle function (handleAddTask=addTask)
+    /**
+   * Adds a new task by inserting it into Supabase and updating local state.
+   *
+   * @param {string} title - New task title.
+   */
   const addTask = useCallback(async (title) => {
     const { data, error: insertError } = await supabase
-      .from('tasks')
+      .from("tasks")
       .insert([{ title, is_complete: false }])
-      .select(); // Return the inserted row(s)
+      .select();
 
-      if (insertError) {
-      
-        console.error(insertError);
-        throw insertError;
-      }
-   
+    if (insertError) {
+       
+      console.error(insertError);
+      throw insertError;
+    }
+
     const inserted = data?.[0];
     if (inserted) {
-      
-      setTasks((prevTasks) => [inserted, ...prevTasks]);
+      setTasks((prev) => [inserted, ...prev]);
     }
   }, []);
 
-  /**
-   * Toggles the is_complete status of a task.
-   * @param {number} id - The ID of the task to update.
+  /** 
+   * Toggles the is_complete flag of a task in Supabase and local state.
+   *
+   * @param {number} id - Task ID.
    * @param {boolean} isComplete - Desired completion state.
    */
   const toggleTask = useCallback(async (id, isComplete) => {
     const { error: updateError } = await supabase
-    .from('tasks')
-    .update({ is_complete: isComplete })
-    .eq('id', id);
-    
+      .from("tasks")
+      .update({ is_complete: isComplete })
+      .eq("id", id);
+
     if (updateError) {
-  
+       
       console.error(updateError);
       throw updateError;
     }
-   
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
+
+    setTasks((prev) =>
+      prev.map((task) =>
         task.id === id ? { ...task, is_complete: isComplete } : task
       )
     );
   }, []);
 
-   /**
-   * Deletes a task by ID from Supabase and updates local state.
-   * 
-   * @param {number} id - The ID of the task to delete.
+  /**
+   * Deletes a task by id from Supabase and local state.
+   *
+   * @param {number} id - Task ID.
    */
   const deleteTask = useCallback(async (id) => {
     const { error: deleteError } = await supabase
-      .from('tasks')
+      .from("tasks")
       .delete()
-      .eq('id', id);  
-      
-    if (deleteError) {
+      .eq("id", id);
 
+    if (deleteError) {
+       
       console.error(deleteError);
       throw deleteError;
     }
-    
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+
+    setTasks((prev) => prev.filter((task) => task.id !== id));
   }, []);
 
-useEffect(() => {
+  useEffect(() => {
     const fetchTasks = async () => {
       await loadTasks();
     };
     
     fetchTasks();
   }, [loadTasks]);
-  
- /** 
+
+  /**
    * Optional: Supabase Realtime subscription.
    * This keeps tasks in sync across multiple tabs.
    * You can comment this out if you want to keep Day 4 simpler.
@@ -159,7 +153,7 @@ useEffect(() => {
       supabase.removeChannel(channel);
     };
   }, []);
-*/
+  */
 
   return {
     tasks,

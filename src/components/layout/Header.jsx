@@ -1,5 +1,6 @@
 import Title from "@components/shared/Title.component";
 import { Button } from "@components/ui/button";
+// Import the useTheme hook to access theme context
 import { useTheme } from "@hooks/useTheme";
 
 /**

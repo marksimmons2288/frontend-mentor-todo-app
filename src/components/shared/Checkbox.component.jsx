@@ -1,5 +1,5 @@
 //import checkbox from a ui library
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/shared/Checkbox.component.jsx";
 
 /**
  * Displays a single task as a list item (read-only on Day 2).

@@ -9,6 +9,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@lib/supabaseClient";
 
+
 function useTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);

@@ -1,5 +1,6 @@
 import Title from "@components/shared/Title.component";
 import { Button } from "@components/ui/button";
+// Import the useTheme hook to access theme context
 import { useTheme } from "@hooks/useTheme";
 
 /**
@@ -17,7 +18,7 @@ export default function Header() {
     <header className="app-header">
       {/* Using the reusable Title component for consistent heading styles */}
       <Title>
-        Supabase Tasks<span className="underline">--Worked with StylecComponents</span>
+        Supabase Tasks<span className="underline">--Worked with Style Components</span>
       </Title>
       <p className="app-header__subtitle">
         Simple task list powered by Supabase, built with React + Vite.
